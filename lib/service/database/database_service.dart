@@ -1,24 +1,36 @@
-import 'package:appwrite/appwrite.dart';
-import 'package:blog/core/constants/appwrite_constants.dart';
-import 'package:blog/service/appwrite/appwrite_service.dart';
+import 'package:blog/core/constants/firebase_constants.dart';
 import 'package:blog/service/logger/logger.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/user_model.dart';
 
 class DatabaseServices {
-  final Databases _databases = Databases(AppwriteService.instance.client);
+  final _databases = FirebaseFirestore.instance;
 
   Future<void> saveUserData(UserModel userModel) async {
     try {
-      _databases.createDocument(
-        databaseId: AppWriteConstants.databaseId,
-        collectionId: AppWriteConstants.userCollectionId,
-        documentId: userModel.id!,
-        data: userModel.toJson(),
-      );
+      await _databases
+          .collection(FirebaseConstants.userCollectionId)
+          .doc(userModel.id)
+          .set(userModel.toJson());
       logSuccess(
           "success create user document : ${userModel.toJson().toString()}");
-    } on AppwriteException catch (e) {
+    } on FirebaseException catch (e) {
       logError(e);
+    }
+  }
+
+  Future<UserModel?> getUserData(String id) async {
+    try {
+      final result = await _databases
+          .collection(FirebaseConstants.userCollectionId)
+          .doc(id)
+          .get();
+      UserModel userModel = UserModel.fromJson(result.data()!);
+      logSuccess("User data ${userModel.toJson().toString()}");
+      return userModel;
+    } on FirebaseException catch (e) {
+      logError(e);
+      return null;
     }
   }
 }

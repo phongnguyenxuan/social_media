@@ -1,32 +1,36 @@
 import 'dart:async';
-
-import 'package:appwrite/appwrite.dart';
-import 'package:blog/service/appwrite/appwrite_service.dart';
-import 'package:appwrite/models.dart' as model;
+import 'package:blog/service/logger/logger.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  final Account _account = Account(AppwriteService.instance.client);
+  final auth = FirebaseAuth.instance;
 
-  Future<model.User> signUp(
-      {String? name, required String email, required String password}) async {
-    final account = await _account.create(
-        userId: ID.unique(), email: email, password: password);
+  Future<UserCredential> signUp(
+      {required String email, required String password}) async {
+    final account = await auth.createUserWithEmailAndPassword(
+        email: email, password: password);
     return account;
   }
 
-  Future<model.User> logIn(
+  Future<UserCredential?> logIn(
       {required String email, required String password}) async {
-    await _account.createEmailPasswordSession(email: email, password: password);
-    return _account.get();
+    try {
+      final account = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      logSuccess("Login Success");
+      return account;
+    } on FirebaseAuthException catch (e) {
+      logError(e);
+      return null;
+    }
   }
 
-  Future<model.User?> currentUser() async {
+  Future<void> logOut() async {
     try {
-      return await _account.get();
-    } on AppwriteException {
-      return null;
-    } catch (e) {
-      return null;
+      await auth.signOut();
+      logSuccess("Success signout");
+    } on FirebaseAuthException catch (e) {
+      logError(e);
     }
   }
 }

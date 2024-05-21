@@ -8,7 +8,6 @@ import 'package:blog/common/widget/on_board_slider.dart/onboarding_navigation_ba
 import 'package:blog/common/widget/on_board_slider.dart/page_offset_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'background_body.dart';
 

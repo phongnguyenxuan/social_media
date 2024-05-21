@@ -34,6 +34,9 @@ class _RegisterViewState extends State<RegisterView> {
         onChange: () {
           logic.goToNextPage(context);
         },
+        onFinish: (){
+          logic.onFinish();
+        },
         pageBodies: [
           nameForm(context),
           emailForm(context),
@@ -46,38 +49,43 @@ class _RegisterViewState extends State<RegisterView> {
   SingleChildScrollView emailForm(BuildContext context) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Center(
-            child: Logo(
-              size: 50,
+      child: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Center(
+              child: Logo(
+                size: 50,
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 60,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Text(
-              "Create your account",
-              style: AppTextStyle.robotoregular
-                  .copyWith(fontSize: 25, fontWeight: FontWeight.bold),
+            const SizedBox(
+              height: 60,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: CustomTextField(
-              formKey: logic.mailKey,
-              validator: logic.mailValidator(logic.emailController.text),
-              tiltle: "Email",
-              controller: logic.emailController,
-              isPassword: false,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Text(
+                "Create your account",
+                style: AppTextStyle.robotoregular
+                    .copyWith(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              child: CustomTextField(
+                formKey: logic.mailKey,
+                validator: state.mailValidator.value,
+                tiltle: "Email",
+                controller: logic.emailController,
+                isPassword: false,
+                onChanged: (value) {
+                  logic.mailValidator(value);
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -116,6 +124,9 @@ class _RegisterViewState extends State<RegisterView> {
                   controller: logic.nameController,
                   validator: state.nameValidator.value,
                   isPassword: false,
+                  onChanged: (value) {
+                    logic.nameValidator(value);
+                  },
                 ),
               ),
             ],
@@ -156,7 +167,11 @@ class _RegisterViewState extends State<RegisterView> {
                   tiltle: "Password",
                   controller: logic.passwordController,
                   isPassword: true,
+                  validator: state.passValidator.value,
                   hidePassword: state.hidePassword.value,
+                  onChanged: (value) {
+                    logic.passValidator(value);
+                  },
                   onHide: () => logic.onChangeHidePass(),
                 ),
               );
@@ -171,6 +186,10 @@ class _RegisterViewState extends State<RegisterView> {
                   controller: logic.confirmPasswordController,
                   isPassword: true,
                   hidePassword: state.hideConfirmPassword.value,
+                  validator: state.confirmValidator.value,
+                  onChanged: (value) {
+                    logic.confirmPassValidator(value);
+                  },
                   onHide: () {
                     state.hideConfirmPassword.value =
                         !state.hideConfirmPassword.value;
