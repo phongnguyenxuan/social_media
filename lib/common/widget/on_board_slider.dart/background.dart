@@ -10,7 +10,7 @@ class Background extends StatelessWidget {
   final double imageHorizontalOffset;
   final bool centerBackground;
 
-  Background({
+  const Background({super.key, 
     required this.imageVerticalOffset,
     required this.child,
     required this.centerBackground,

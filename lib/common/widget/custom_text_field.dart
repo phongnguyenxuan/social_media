@@ -1,6 +1,5 @@
 import 'package:blog/core/themes/color.dart';
 import 'package:blog/core/themes/textstyle.dart';
-import 'package:blog/service/logger/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,7 +16,7 @@ class CustomTextField extends StatefulWidget {
       required this.controller,
       this.hint,
       this.formKey,
-      this.validator});
+      this.validator, this.onChanged});
   final String tiltle;
   final TextEditingController controller;
   final bool isPassword;
@@ -26,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   final void Function()? onHide;
   final GlobalKey<FormState>? formKey;
   final String? validator;
+  final void Function(String)? onChanged;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -34,10 +34,10 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
-    logSuccess("message ${widget.validator}");
     return TextFormField(
       controller: widget.controller,
       obscureText: widget.hidePassword ?? false,
+      onChanged: widget.onChanged,
       decoration: InputDecoration(
         errorText: widget.validator == "" ? null : widget.validator,
         labelText: widget.tiltle,
@@ -58,9 +58,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : null,
         floatingLabelStyle: AppTextStyle.robotoregular.copyWith(
             fontSize: 18,
-            color: (widget.formKey?.currentState?.validate() ?? true)
-                ? AppColors.blueGradient
-                : Colors.red),
+            color:
+                (widget.validator == "") ? AppColors.blueGradient : Colors.red),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
         ),
@@ -68,10 +67,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderRadius: BorderRadius.circular(15),
           borderSide: const BorderSide(color: Colors.red),
         ),
-        focusedErrorBorder: GradientOutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            focusedGradient: AppColors.logoGradient,
-            unfocusedGradient: AppColors.logoGradient),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(color: AppColors.greyColor)),
