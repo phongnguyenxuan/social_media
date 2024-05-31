@@ -1,11 +1,10 @@
 import 'package:blog/core/constants/regex.dart';
-import 'package:blog/core/utils/string_helper.dart';
 import 'package:blog/models/user_model.dart';
 import 'package:blog/modules/auth/register/register_state.dart';
-import 'package:blog/service/auth/auth_service.dart';
-import 'package:blog/service/database/database_service.dart';
+import 'package:blog/routes/app_routes.dart';
 import 'package:blog/service/logger/logger.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:blog/service/network/apis/api_client.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -18,11 +17,10 @@ class RegisterLogic extends GetxController {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
-  final AuthService authService = AuthService();
-  final DatabaseServices databaseServices = DatabaseServices();
   final nameKey = GlobalKey<FormState>();
   final mailKey = GlobalKey<FormState>();
   final passKey = GlobalKey<FormState>();
+  final ApiClient apiClient = ApiClient();
 
   @override
   void onInit() {
@@ -39,19 +37,6 @@ class RegisterLogic extends GetxController {
 
   void onChangeHidePass() {
     state.hidePassword.value = !state.hidePassword.value;
-  }
-
-  void login() async {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      try {
-        await authService
-            .logIn(
-                email: emailController.text, password: passwordController.text)
-            .then((value) {});
-      } catch (e) {
-        logError(e);
-      }
-    }
   }
 
   void goToNextPage(BuildContext context) {
@@ -86,24 +71,19 @@ class RegisterLogic extends GetxController {
   void register() async {
     try {
       EasyLoading.show();
-      var user = await authService.signUp(
-          email: emailController.text, password: passwordController.text);
-      UserModel userModel = UserModel(
-        id: user.user?.uid,
-        name: StringUtils.validateString(nameController.text),
-        email: user.user?.email,
-        follower: [],
-        following: [],
-        emailVerification: user.user?.emailVerified,
-        status: true,
-        createdAt: DateTime.now().toString(),
-      );
-      await databaseServices.saveUserData(userModel);
+      UserModel? userModel = await apiClient.register(
+          email: emailController.text,
+          password: passwordController.text,
+          name: nameController.text);
       EasyLoading.dismiss();
-    } on FirebaseException catch (e) {
-      logError(e);
+      if (userModel != null) {
+        Get.offAllNamed(AppRoutes.MAIN);
+      }
+    } on DioException catch (e) {
+      logError(e.response?.data["data"]);
       EasyLoading.dismiss();
-      if (e.code == "email-already-in-use") {
+      if (e.response?.data['data'] ==
+          "This email already exists on the system") {
         pageController.jumpToPage(1);
         state.mailValidator.value = "Email already exists";
       }

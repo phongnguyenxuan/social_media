@@ -1,43 +1,37 @@
 // ignore_for_file: unnecessary_getters_setters
 
 class UserModel {
-  String? _id;
+  String? _sId;
   String? _name;
-  bool? _status;
-  String? _description;
   String? _email;
   String? _phone;
-  bool? _emailVerification;
+  String? _avatar;
+  String? _coverImage;
+  String? _description;
   List<String>? _follower;
   List<String>? _following;
-  String? _avatar;
-  String? _coverPhoto;
+  bool? _isNewAccount;
+  bool? _emailVerify;
   String? _createdAt;
 
   UserModel(
-      {String? id,
+      {String? sId,
       String? name,
-      bool? status,
-      String? description,
       String? email,
       String? phone,
-      bool? emailVerification,
+      String? avatar,
+      String? coverImage,
+      String? description,
       List<String>? follower,
       List<String>? following,
-      String? avatar,
-      String? coverPhoto,
+      bool? isNewAccount,
+      bool? emailVerify,
       String? createdAt}) {
-    if (id != null) {
-      _id = id;
+    if (sId != null) {
+      _sId = sId;
     }
     if (name != null) {
       _name = name;
-    }
-    if (status != null) {
-      _status = status;
-    }
-    if (description != null) {
-      _description = description;
     }
     if (email != null) {
       _email = email;
@@ -45,8 +39,14 @@ class UserModel {
     if (phone != null) {
       _phone = phone;
     }
-    if (emailVerification != null) {
-      _emailVerification = emailVerification;
+    if (avatar != null) {
+      _avatar = avatar;
+    }
+    if (coverImage != null) {
+      _coverImage = coverImage;
+    }
+    if (description != null) {
+      _description = description;
     }
     if (follower != null) {
       _follower = follower;
@@ -54,71 +54,70 @@ class UserModel {
     if (following != null) {
       _following = following;
     }
-    if (avatar != null) {
-      _avatar = avatar;
+    if (isNewAccount != null) {
+      _isNewAccount = isNewAccount;
     }
-    if (coverPhoto != null) {
-      _coverPhoto = coverPhoto;
+    if (emailVerify != null) {
+      _emailVerify = emailVerify;
     }
     if (createdAt != null) {
       _createdAt = createdAt;
     }
   }
 
-  String? get id => _id;
-  set id(String? id) => _id = id;
+  String? get sId => _sId;
+  set sId(String? sId) => _sId = sId;
   String? get name => _name;
   set name(String? name) => _name = name;
-  bool? get status => _status;
-  set status(bool? status) => _status = status;
-  String? get description => _description;
-  set description(String? description) => _description = description;
   String? get email => _email;
   set email(String? email) => _email = email;
   String? get phone => _phone;
   set phone(String? phone) => _phone = phone;
-  bool? get emailVerification => _emailVerification;
-  set emailVerification(bool? emailVerification) =>
-      _emailVerification = emailVerification;
+  String? get avatar => _avatar;
+  set avatar(String? avatar) => _avatar = avatar;
+  String? get coverImage => _coverImage;
+  set coverImage(String? coverImage) => _coverImage = coverImage;
+  String? get description => _description;
+  set description(String? description) => _description = description;
   List<String>? get follower => _follower;
   set follower(List<String>? follower) => _follower = follower;
   List<String>? get following => _following;
   set following(List<String>? following) => _following = following;
-  String? get avatar => _avatar;
-  set avatar(String? avatar) => _avatar = avatar;
-  String? get coverPhoto => _coverPhoto;
-  set coverPhoto(String? coverPhoto) => _coverPhoto = coverPhoto;
+  bool? get isNewAccount => _isNewAccount;
+  set isNewAccount(bool? isNewAccount) => _isNewAccount = isNewAccount;
+  bool? get emailVerify => _emailVerify;
+  set emailVerify(bool? emailVerify) => _emailVerify = emailVerify;
   String? get createdAt => _createdAt;
   set createdAt(String? createdAt) => _createdAt = createdAt;
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
+    _sId = json['_id'];
     _name = json['name'];
-    _status = json['status'];
-    _description = json['description'];
     _email = json['email'];
     _phone = json['phone'];
-    _emailVerification = json['emailVerification'];
+    _avatar = json['avatar'];
+    _coverImage = json['coverImage'];
+    _description = json['description'];
     _follower = json['follower'].cast<String>();
     _following = json['following'].cast<String>();
-    _avatar = json['avatar'];
-    _coverPhoto = json['coverPhoto'];
+    _isNewAccount = json['isNewAccount'];
+    _emailVerify = json['emailVerify'];
     _createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = _id;
+    data['_id'] = _sId;
     data['name'] = _name;
-    data['status'] = _status;
-    data['description'] = _description;
     data['email'] = _email;
     data['phone'] = _phone;
-    data['emailVerification'] = _emailVerification;
+    data['avatar'] = _avatar;
+    data['coverImage'] = _coverImage;
+    data['description'] = _description;
     data['follower'] = _follower;
     data['following'] = _following;
-    data['avatar'] = _avatar;
-    data['coverPhoto'] = _coverPhoto;
+    data['isNewAccount'] = _isNewAccount;
+    data['emailVerify'] = _emailVerify;
     data['createdAt'] = _createdAt;
     return data;
   }
