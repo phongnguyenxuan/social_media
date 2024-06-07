@@ -1,3 +1,4 @@
+import 'package:blog/common/widget/app_bar/custom_appbar.dart';
 import 'package:blog/common/widget/logo.dart';
 import 'package:blog/common/widget/on_board_slider.dart/flutter_onboarding_slider.dart';
 import 'package:blog/core/themes/color.dart';
@@ -21,20 +22,21 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      appBar: const CustomAppBar(type: AppbarType.normal),
       body: OnBoardingSlider(
         totalPage: 3,
         hasFloatingButton: true,
         headerBackgroundColor: AppColors.lightBackground,
+        pageBackgroundColor: AppColors.lightBackground,
         finishButtonText: "Create account",
         finishButtonTextStyle: AppTextStyle.robotoregular.copyWith(
             fontSize: 15, color: Colors.white, fontWeight: FontWeight.w700),
         speed: 1,
         pageController: logic.pageController,
         onChange: () {
-          logic.goToNextPage(context);
+          logic.goToNextPage();
         },
-        onFinish: (){
+        onFinish: () {
           logic.onFinish();
         },
         pageBodies: [

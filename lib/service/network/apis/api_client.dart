@@ -14,31 +14,25 @@ class ApiClient {
   //Auth
   Future<UserModel?> login(
       {required String email, required String password}) async {
-    try {
-      var request = {
-        "email": email,
-        "password": password,
-      };
-      Response response =
-          await dioClient.post(ApiEndPoints.LOGIN, data: request);
-      if (response.statusCode == 200) {
-        UserModel result = UserModel.fromJson(response.data["data"]);
-        await sharedPreferencesManager.setString(
-            PreferenceKey.access_token, response.data["data"]["token"]);
-        await sharedPreferencesManager.setString(
-            PreferenceKey.refresh_token, response.data["data"]["refreshToken"]);
-        await sharedPreferencesManager.setString(
-            PreferenceKey.user_id, result.sId!);
-        logSuccess("login success | data: ${result.toJson().toString()}");
-        return result;
-      } else {
-        throw NetworkException(
-            message: response.statusMessage, statusCode: response.statusCode);
-      }
-    } catch (e) {
-      logError(e);
+    var request = {
+      "email": email,
+      "password": password,
+    };
+    Response response = await dioClient.post(ApiEndPoints.LOGIN, data: request);
+    if (response.statusCode == 200) {
+      UserModel result = UserModel.fromJson(response.data["data"]);
+      await sharedPreferencesManager.setString(
+          PreferenceKey.access_token, response.data["data"]["token"]);
+      await sharedPreferencesManager.setString(
+          PreferenceKey.refresh_token, response.data["data"]["refreshToken"]);
+      await sharedPreferencesManager.setString(
+          PreferenceKey.user_id, result.sId!);
+      logSuccess("login success | data: ${result.toJson().toString()}");
+      return result;
+    } else {
+      throw NetworkException(
+          message: response.statusMessage, statusCode: response.statusCode);
     }
-    return null;
   }
 
   Future<UserModel?> register(
@@ -65,6 +59,38 @@ class ApiClient {
     } else {
       throw NetworkException(
           message: response.statusMessage, statusCode: response.statusCode);
+    }
+  }
+
+  Future<void> sendOTP({required String email}) async {
+    var request = {
+      "email": email,
+    };
+    Response response =
+        await dioClient.post(ApiEndPoints.SEND_OTP, data: request);
+    if (response.statusCode == 200) {
+      logSuccess(response.data['data']);
+    } else {
+      throw NetworkException(
+          message: response.statusMessage, statusCode: response.statusCode);
+    }
+  }
+
+  // USER
+  Future<UserModel?> getUserInfo({required String id}) async {
+    Response response = await dioClient.get(ApiEndPoints.USER_INFO(id));
+    try {
+      if (response.statusCode == 200) {
+        UserModel userModel = UserModel.fromJson(response.data['data']);
+        logSuccess('User info ${userModel.toJson().toString()}');
+        return userModel;
+      } else {
+        throw NetworkException(
+            message: response.statusMessage, statusCode: response.statusCode);
+      }
+    } on DioException catch (e) {
+      logError(e);
+      return null;
     }
   }
 }
