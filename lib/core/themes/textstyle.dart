@@ -10,4 +10,12 @@ class AppTextStyle {
   static TextStyle linkStyle = GoogleFonts.roboto(
       fontWeight: FontWeight.normal,
       textStyle: const TextStyle(color: AppColors.linkColor));
+
+  static TextStyle headerStyle = GoogleFonts.poppins(
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle header2Style = GoogleFonts.inter(
+    fontWeight: FontWeight.w500,
+  );
 }

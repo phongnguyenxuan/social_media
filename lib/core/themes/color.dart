@@ -12,6 +12,8 @@ class AppColors {
   static const Color primaryColor = Color(0xFF0277B6);
   static const Color darkInputColor = Color(0xFF242424);
   static const Color lightInputColor = Color(0xFFFFFFFF);
+  static const Color greyColor2 = Color(0xFF989898);
+  static const Color greyColor3 = Color(0xFF545454);
 
   static const LinearGradient logoGradient =
       LinearGradient(colors: [blueGradient, purpleGradient]);

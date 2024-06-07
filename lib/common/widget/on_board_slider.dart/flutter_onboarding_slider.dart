@@ -6,8 +6,10 @@ import 'package:blog/common/widget/on_board_slider.dart/background_controller.da
 import 'package:blog/common/widget/on_board_slider.dart/background_final_button.dart';
 import 'package:blog/common/widget/on_board_slider.dart/onboarding_navigation_bar.dart';
 import 'package:blog/common/widget/on_board_slider.dart/page_offset_provider.dart';
+import 'package:blog/core/themes/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'background_body.dart';
 
@@ -163,25 +165,28 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
       create: (BuildContext context) =>
           PageOffsetNotifier(widget.pageController),
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: widget.pageBackgroundColor,
         floatingActionButton: Visibility(
           visible: !keyboardIsOpen,
-          child: BackgroundFinalButton(
-            buttonTextStyle: widget.finishButtonTextStyle,
-            skipIcon: widget.skipIcon,
-            addButton: widget.addButton,
-            currentPage: _currentPage,
-            pageController: widget.pageController,
-            totalPage: widget.totalPage,
-            onPageFinish: widget.onFinish,
-            finishButtonStyle: widget.finishButtonStyle,
-            buttonText: widget.finishButtonText,
-            hasSkip: widget.hasSkip,
-            onPageChange: widget.onChange,
-          ),
+          child: KeyboardVisibilityBuilder(builder: (context, visible) {
+            return !visible
+                ? BackgroundFinalButton(
+                    buttonTextStyle: widget.finishButtonTextStyle,
+                    skipIcon: widget.skipIcon,
+                    addButton: widget.addButton,
+                    currentPage: _currentPage,
+                    pageController: widget.pageController,
+                    totalPage: widget.totalPage,
+                    onPageFinish: widget.onFinish,
+                    finishButtonStyle: widget.finishButtonStyle,
+                    buttonText: widget.finishButtonText,
+                    hasSkip: widget.hasSkip,
+                    onPageChange: widget.onChange,
+                  )
+                : Container();
+          }),
         ),
         body: CupertinoPageScaffold(
+          backgroundColor: AppColors.lightBackground,
           navigationBar: OnBoardingNavigationBar(
             skipFunctionOverride: widget.skipFunctionOverride,
             leading: widget.leading,
@@ -194,38 +199,29 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
             finishButton: widget.trailing,
             skipTextButton: widget.skipTextButton,
           ),
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: widget.pageBackgroundGradient,
-              color: widget.pageBackgroundColor,
-            ),
-            child: SafeArea(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: BackgroundBody(
-                        controller: widget.pageController,
-                        function: slide,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: BackgroundBody(
+                    controller: widget.pageController,
+                    function: slide,
+                    totalPage: widget.totalPage,
+                    bodies: widget.pageBodies,
+                  ),
+                ),
+                widget.addController
+                    ? BackgroundController(
+                        hasFloatingButton: widget.hasFloatingButton,
+                        indicatorPosition: widget.indicatorPosition,
+                        indicatorAbove: widget.indicatorAbove,
+                        currentPage: _currentPage,
                         totalPage: widget.totalPage,
-                        bodies: widget.pageBodies,
-                      ),
-                    ),
-                    widget.addController
-                        ? BackgroundController(
-                            hasFloatingButton: widget.hasFloatingButton,
-                            indicatorPosition: widget.indicatorPosition,
-                            indicatorAbove: widget.indicatorAbove,
-                            currentPage: _currentPage,
-                            totalPage: widget.totalPage,
-                            controllerColor: widget.controllerColor,
-                          )
-                        : const SizedBox.shrink(),
-                  ]),
-            ),
-          ),
+                        controllerColor: widget.controllerColor,
+                      )
+                    : const SizedBox.shrink(),
+              ]),
         ),
       ),
     );

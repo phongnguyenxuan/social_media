@@ -32,6 +32,7 @@ class RegisterLogic extends GetxController {
     emailController.dispose();
     passwordController.dispose();
     nameController.dispose();
+    pageController.dispose();
     super.onClose();
   }
 
@@ -39,7 +40,7 @@ class RegisterLogic extends GetxController {
     state.hidePassword.value = !state.hidePassword.value;
   }
 
-  void goToNextPage(BuildContext context) {
+  void goToNextPage() {
     switch (pageController.page) {
       case 0.0:
         nameValidator(nameController.text);

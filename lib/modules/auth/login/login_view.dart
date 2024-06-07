@@ -40,13 +40,19 @@ class _LoginViewState extends State<LoginView> {
                   size: 50,
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: CustomTextField(
-                  tiltle: "Email",
-                  controller: logic.emailController,
-                  isPassword: false,
+              Obx(
+                () => Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: CustomTextField(
+                    tiltle: "Email",
+                    controller: logic.emailController,
+                    isPassword: false,
+                    validator: state.emailValidator.value,
+                    onChanged: (value) {
+                      logic.mailValidator(value);
+                    },
+                  ),
                 ),
               ),
               Obx(
@@ -58,7 +64,11 @@ class _LoginViewState extends State<LoginView> {
                       controller: logic.passwordController,
                       isPassword: true,
                       hidePassword: state.hidePassword.value,
+                      validator: state.passwordValidator.value,
                       onHide: () => logic.onChangeHidePass(),
+                      onChanged: (value) {
+                        state.passwordValidator.value = "";
+                      },
                     ),
                   );
                 },
@@ -70,7 +80,9 @@ class _LoginViewState extends State<LoginView> {
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    logic.pushToForgotPassView();
+                  },
                   child: Text(
                     "Forgot the password?",
                     style: AppTextStyle.linkStyle

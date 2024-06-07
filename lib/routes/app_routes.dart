@@ -6,4 +6,6 @@ class AppRoutes {
   static const String REGISTER = "/register";
 
   static const String MAIN = "/main";
+
+  static const String FORGOT_PASSWORD = "/forgot_password";
 }
