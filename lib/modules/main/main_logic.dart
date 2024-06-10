@@ -4,7 +4,6 @@ import 'package:blog/modules/main/main_state.dart';
 import 'package:blog/service/database/local_database_service.dart';
 import 'package:blog/service/logger/logger.dart';
 import 'package:blog/service/network/apis/api_client.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainLogic extends GetxController {
@@ -32,20 +31,16 @@ class MainLogic extends GetxController {
     if (selectTabIndex != state.currentTab.value) {
       switch (selectTabIndex) {
         case AppKey.TAB_HOME:
-          state.pageViewController.animateToPage(0,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          state.pageViewController.jumpToPage(0);
           break;
         case AppKey.TAB_SAVE:
-          state.pageViewController.animateToPage(1,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          state.pageViewController.jumpToPage(1);
           break;
         case AppKey.TAB_CONVERSATION:
-          state.pageViewController.animateToPage(2,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          state.pageViewController.jumpToPage(2);
           break;
         case AppKey.TAB_ME:
-          state.pageViewController.animateToPage(3,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          state.pageViewController.jumpToPage(3);
           break;
       }
       state.currentTab.value = selectTabIndex;

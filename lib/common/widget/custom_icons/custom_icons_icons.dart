@@ -42,4 +42,8 @@ class CustomIcons {
       IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData menu_dots =
       IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData bookmark =
+      IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData bookmark_soild =
+      IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

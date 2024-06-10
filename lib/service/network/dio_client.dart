@@ -115,6 +115,7 @@ class DioClient {
   Future<dynamic> get(
     String uri, {
     Map<String, dynamic>? queryParameters,
+    dynamic data,
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
@@ -122,6 +123,7 @@ class DioClient {
     try {
       final Response response = await _dio.get(
         uri,
+        data: data,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,

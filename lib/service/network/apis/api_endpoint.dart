@@ -15,4 +15,7 @@ class ApiEndPoints {
 
   //USER
   static String USER_INFO(String id) => "/user/info?id=$id";
+
+  //POST
+  static const String NEW_FEEDS = "/post/news";
 }
