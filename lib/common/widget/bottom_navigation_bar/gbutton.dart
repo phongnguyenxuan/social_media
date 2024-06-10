@@ -1,10 +1,11 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show HapticFeedback;
 
-import 'button.dart';
-import 'gnav.dart';
+import 'bottom_bar_button.dart';
 
-class GButton extends StatefulWidget {
+class BottomButton extends StatefulWidget {
   final bool? active;
   final bool? debug;
   final bool? haptic;
@@ -21,6 +22,7 @@ class GButton extends StatefulWidget {
   final Function? onPressed;
   final String text;
   final IconData icon;
+  final IconData activeIcon;
   final Color? backgroundColor;
   final Duration? duration;
   final Curve? curve;
@@ -31,11 +33,10 @@ class GButton extends StatefulWidget {
   final Border? activeBorder;
   final List<BoxShadow>? shadow;
   final String? semanticLabel;
-  final GnavStyle? style;
   final double? textSize;
 
-  const GButton({
-    Key? key,
+  const BottomButton({
+    super.key,
     this.active,
     this.haptic,
     this.backgroundColor,
@@ -62,22 +63,21 @@ class GButton extends StatefulWidget {
     this.activeBorder,
     this.shadow,
     this.semanticLabel,
-    this.style = GnavStyle.google,
     this.textSize,
-  }) : super(key: key);
+    required this.activeIcon,
+  });
 
   @override
-  _GButtonState createState() => _GButtonState();
+  _BottomButtonState createState() => _BottomButtonState();
 }
 
-class _GButtonState extends State<GButton> {
+class _BottomButtonState extends State<BottomButton> {
   @override
   Widget build(BuildContext context) {
     return Semantics(
       label: widget.semanticLabel ?? widget.text,
-      child: Button(
+      child: BottomBarButton(
         textSize: widget.textSize,
-        style: widget.style,
         borderRadius: widget.borderRadius,
         border: widget.border,
         activeBorder: widget.activeBorder,
@@ -102,6 +102,7 @@ class _GButtonState extends State<GButton> {
         iconActiveColor: widget.iconActiveColor,
         iconColor: widget.iconColor,
         icon: widget.icon,
+        activeIcon: widget.activeIcon,
         text: Text(
           widget.text,
           style: widget.textStyle ??

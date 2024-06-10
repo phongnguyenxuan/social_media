@@ -1,15 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 import 'gbutton.dart';
 
-enum GnavStyle {
-  google,
-  oldSchool,
-}
-
-class GNav extends StatefulWidget {
-  const GNav({
-    Key? key,
+class CustomBottomNavigation extends StatefulWidget {
+  const CustomBottomNavigation({
+    super.key,
     required this.tabs,
     this.selectedIndex = 0,
     this.onTabChange,
@@ -34,11 +31,10 @@ class GNav extends StatefulWidget {
     this.haptic = true,
     this.tabBackgroundGradient,
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
-    this.style = GnavStyle.google,
     this.textSize,
-  }) : super(key: key);
+  });
 
-  final List<GButton> tabs;
+  final List<BottomButton> tabs;
   final int selectedIndex;
   final ValueChanged<int>? onTabChange;
   final double gap;
@@ -62,14 +58,12 @@ class GNav extends StatefulWidget {
   final List<BoxShadow>? tabShadow;
   final Gradient? tabBackgroundGradient;
   final MainAxisAlignment mainAxisAlignment;
-  final GnavStyle? style;
   final double? textSize;
-
   @override
-  _GNavState createState() => _GNavState();
+  _CustomBottomNavigationState createState() => _CustomBottomNavigationState();
 }
 
-class _GNavState extends State<GNav> {
+class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   late int selectedIndex;
   bool clickable = true;
 
@@ -80,7 +74,7 @@ class _GNavState extends State<GNav> {
   }
 
   @override
-  void didUpdateWidget(GNav oldWidget) {
+  void didUpdateWidget(CustomBottomNavigation oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedIndex != oldWidget.selectedIndex) {
       selectedIndex = widget.selectedIndex;
@@ -94,9 +88,8 @@ class _GNavState extends State<GNav> {
         child: Row(
             mainAxisAlignment: widget.mainAxisAlignment,
             children: widget.tabs
-                .map((t) => GButton(
+                .map((t) => BottomButton(
                       textSize: widget.textSize,
-                      style: widget.style,
                       key: t.key,
                       border: t.border ?? widget.tabBorder,
                       activeBorder: t.activeBorder ?? widget.tabActiveBorder,
@@ -119,6 +112,7 @@ class _GNavState extends State<GNav> {
                       textStyle: t.textStyle ?? widget.textStyle,
                       text: t.text,
                       icon: t.icon,
+                      activeIcon: t.activeIcon,
                       haptic: widget.haptic,
                       leading: t.leading,
                       curve: widget.curve,

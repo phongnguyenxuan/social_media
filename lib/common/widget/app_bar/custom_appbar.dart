@@ -1,4 +1,4 @@
-import 'package:blog/common/widget/custom_icons/custom_icon_icons.dart';
+import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
 import 'package:blog/common/widget/logo.dart';
 import 'package:blog/core/themes/color.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +22,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               preferredSize: preferredSize,
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                 child: Row(
                   children: [
                     const Logo(),
                     const Spacer(),
                     IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.search_rounded))
+                        onPressed: () {}, icon: const Icon(CustomIcons.search))
                   ],
                 ),
               )),
@@ -44,7 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               },
               splashRadius: 25,
               icon: const Icon(
-                CustomIcon.back_icon,
+                Icons.arrow_back_ios,
                 color: Colors.black,
                 size: 45,
               )),
@@ -54,5 +53,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-      (type == AppbarType.logo) ? (kToolbarHeight + 50) : kToolbarHeight);
+      (type == AppbarType.logo) ? (kToolbarHeight + 25) : kToolbarHeight);
 }

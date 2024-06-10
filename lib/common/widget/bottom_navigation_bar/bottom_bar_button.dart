@@ -1,13 +1,10 @@
-import 'dart:math' show pow;
-
+// ignore_for_file: unused_local_variable, library_private_types_in_public_api
 import 'package:blog/core/themes/color.dart';
 import 'package:flutter/material.dart';
 
-import 'gnav.dart';
-
-class Button extends StatefulWidget {
-  const Button({
-    Key? key,
+class BottomBarButton extends StatefulWidget {
+  const BottomBarButton({
+    super.key,
     this.icon,
     this.iconSize,
     this.leading,
@@ -30,11 +27,12 @@ class Button extends StatefulWidget {
     this.border,
     this.activeBorder,
     this.shadow,
-    this.style = GnavStyle.google,
     this.textSize,
-  }) : super(key: key);
+    this.activeIcon,
+  });
 
   final IconData? icon;
+  final IconData? activeIcon;
   final double? iconSize;
   final Text? text;
   final Widget? leading;
@@ -56,14 +54,14 @@ class Button extends StatefulWidget {
   final Border? border;
   final Border? activeBorder;
   final List<BoxShadow>? shadow;
-  final GnavStyle? style;
   final double? textSize;
 
   @override
-  _ButtonState createState() => _ButtonState();
+  _BottomBarButtonState createState() => _BottomBarButtonState();
 }
 
-class _ButtonState extends State<Button> with TickerProviderStateMixin {
+class _BottomBarButtonState extends State<BottomBarButton>
+    with TickerProviderStateMixin {
   late bool _expanded;
   late final AnimationController expandController;
 
@@ -71,7 +69,6 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _expanded = widget.active!;
-
     expandController =
         AnimationController(vsync: this, duration: widget.duration)
           ..addListener(() => setState(() {}));
@@ -90,21 +87,28 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
         .drive(CurveTween(
             curve: _expanded ? widget.curve! : widget.curve!.flipped))
         .value;
-    var _colorTween =
+    var colorTween =
         ColorTween(begin: widget.iconColor, end: widget.iconActiveColor);
-    var _colorTweenAnimation = _colorTween.animate(CurvedAnimation(
+    var colorTweenAnimation = colorTween.animate(CurvedAnimation(
+        parent: expandController,
+        curve: _expanded ? Curves.easeInExpo : Curves.easeOutCirc));
+    var iconTweenAnimation = colorTween.animate(CurvedAnimation(
         parent: expandController,
         curve: _expanded ? Curves.easeInExpo : Curves.easeOutCirc));
 
     _expanded = !widget.active!;
-    if (_expanded)
+    if (_expanded) {
       expandController.reverse();
-    else
+    } else {
       expandController.forward();
+    }
 
     Widget icon = widget.leading ??
         Icon(widget.icon,
-            color: _colorTweenAnimation.value, size: widget.iconSize);
+            color: colorTweenAnimation.value, size: widget.iconSize);
+
+    Widget activeIcon = Icon(widget.activeIcon,
+        color: widget.iconActiveColor, size: widget.iconSize);
 
     return Material(
       type: MaterialType.transparency,
@@ -122,7 +126,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
             decoration: BoxDecoration(
               boxShadow: widget.shadow,
               border: widget.active!
-                  ? Border(
+                  ? const Border(
                       bottom:
                           BorderSide(width: 2, color: AppColors.primaryColor))
                   : widget.border,
@@ -140,23 +144,13 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
               fit: BoxFit.fitHeight,
               child: Builder(
                 builder: (_) {
-                  if (widget.style == GnavStyle.google) {
-                    return Stack(
-                      children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Opacity(
-                                opacity: 0,
-                                child: icon,
-                              ),
-                            ]),
-                        Align(alignment: Alignment.centerLeft, child: icon),
-                      ],
-                    );
-                  } else {
-                    return Container();
-                  }
+                  return Stack(
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: widget.active! ? activeIcon : icon),
+                    ],
+                  );
                 },
               ),
             ),

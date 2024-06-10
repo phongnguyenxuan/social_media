@@ -14,6 +14,9 @@ class AppColors {
   static const Color lightInputColor = Color(0xFFFFFFFF);
   static const Color greyColor2 = Color(0xFF989898);
   static const Color greyColor3 = Color(0xFF545454);
+  static const Color iconColor = Color(0xFF393D53);
+  static const Color greenColor = Color(0xFF5DC473);
+  static const Color postBorderColor = Color(0xFFF5F5F5);
 
   static const LinearGradient logoGradient =
       LinearGradient(colors: [blueGradient, purpleGradient]);
