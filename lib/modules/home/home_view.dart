@@ -1,16 +1,12 @@
-import 'dart:ui';
-
 import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
 import 'package:blog/common/widget/custom_refresh/custom_refresher.dart';
 import 'package:blog/core/constants/env.dart';
 import 'package:blog/core/themes/color.dart';
 import 'package:blog/core/themes/textstyle.dart';
+import 'package:blog/modules/home/home_logic.dart';
 import 'package:blog/modules/home/post/post_view.dart';
-import 'package:blog/modules/main/main_logic.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../common/widget/app_bar/custom_appbar.dart';
@@ -23,38 +19,50 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final state = Get.find<MainLogic>().state;
+  final state = Get.find<HomeLogic>().state;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightBackground,
-      appBar: const CustomAppBar(type: AppbarType.logo),
-      body: Obx(
-        () => CustomSmartRefresher(
-          controller: state.refreshController.value,
-          enablePullDown: true,
-          enablePullUp: true,
-          scrollController: state.homeScrollCtrl.value,
-          child: SingleChildScrollView(
-            controller: state.homeScrollCtrl.value,
-            child: Column(
-              children: [
-                // HEADER
-                addPostHeader(),
-                const SizedBox(
-                  height: 10,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.lightBackground,
+        body: Obx(
+          () => CustomSmartRefresher(
+            controller: state.refreshController.value,
+            enablePullDown: true,
+            enablePullUp: true,
+            scrollController: state.homeScrollCtrl.value,
+            child: CustomScrollView(
+              controller: state.homeScrollCtrl.value,
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                const SliverAppBar(
+                  backgroundColor: AppColors.lightBackground,
+                  elevation: 0,
+                  automaticallyImplyLeading: false,
+                  floating: true,
+                  snap: false,
+                  flexibleSpace: CustomAppBar(type: AppbarType.logo),
+                  toolbarHeight: kToolbarHeight + 20,
                 ),
-                // STORY
-                storyWidget(),
-                // LIST POST
-                ListView.builder(
-                  itemCount: 10,
-                  shrinkWrap: true,
-                  primary: false,
-                  itemBuilder: (context, index) {
-                    return PostView();
-                  },
-                )
+                SliverToBoxAdapter(
+                  child: addPostHeader(),
+                ),
+                SliverToBoxAdapter(
+                  child: storyWidget(),
+                ),
+                SliverToBoxAdapter(
+                  child: ListView.builder(
+                    controller: state.homeScrollCtrl.value,
+                    itemCount: state.listNewFeeds.length,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (context, index) {
+                      return PostView(
+                        postData: state.listNewFeeds[index],
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -99,6 +107,7 @@ class _HomeViewState extends State<HomeView> {
 
   Container addPostHeader() {
     return Container(
+      margin: EdgeInsets.only(top: 10, bottom: 20),
       child: Row(
         children: [
           const SizedBox(

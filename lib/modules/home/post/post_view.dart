@@ -1,10 +1,15 @@
+import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
 import 'package:blog/core/constants/env.dart';
 import 'package:blog/core/themes/color.dart';
+import 'package:blog/models/post_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class PostView extends StatefulWidget {
-  const PostView({super.key});
+  final PostModel postData;
+  const PostView({super.key, required this.postData});
 
   @override
   State<PostView> createState() => _PostViewState();
@@ -20,6 +25,7 @@ class _PostViewState extends State<PostView> {
         top: BorderSide(width: 2, color: AppColors.postBorderColor),
       )),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             // color: Colors.red,
@@ -35,14 +41,15 @@ class _PostViewState extends State<PostView> {
                         height: 40,
                         color: AppColors.greyColor2,
                         child: CachedNetworkImage(
-                            imageUrl: AppKey.DEFAULT_AVATAR)),
+                            imageUrl: widget.postData.author?.avatar ??
+                                AppKey.DEFAULT_AVATAR)),
                   ),
                 ),
                 const SizedBox(
                   width: 5,
                 ),
                 //name
-                Text("user name"),
+                Text(widget.postData.author?.name ?? ""),
                 const Spacer(),
                 IconButton(
                   splashRadius: 15,
@@ -54,6 +61,49 @@ class _PostViewState extends State<PostView> {
                   ),
                 ),
               ],
+            ),
+          ),
+          Markdown(
+            data: widget.postData.content ?? "",
+            physics: const NeverScrollableScrollPhysics(),
+            softLineBreak: true,
+            shrinkWrap: true,
+          ),
+          bottomWidget()
+        ],
+      ),
+    );
+  }
+
+  Container bottomWidget() {
+    return Container(
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {},
+            splashRadius: 20,
+            icon: const Icon(
+              CustomIcons.heart_outline,
+              color: AppColors.greyColor2,
+              size: 20,
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            splashRadius: 20,
+            icon: const Icon(
+              CustomIcons.comment_dots,
+              color: AppColors.greyColor2,
+              size: 20,
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            splashRadius: 20,
+            icon: const Icon(
+              CustomIcons.bookmark,
+              color: AppColors.greyColor2,
+              size: 20,
             ),
           )
         ],

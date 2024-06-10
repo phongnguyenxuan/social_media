@@ -1,4 +1,5 @@
 import 'package:blog/core/constants/preference_key.dart';
+import 'package:blog/models/post_model.dart';
 import 'package:blog/models/user_model.dart';
 import 'package:blog/service/database/local_database_service.dart';
 import 'package:blog/service/logger/logger.dart';
@@ -11,7 +12,7 @@ class ApiClient {
   final DioClient dioClient = DioClient.instance;
   final SharedPreferencesManager sharedPreferencesManager =
       SharedPreferencesManager.instance;
-  //Auth
+  //============================= Auth ========================================
   Future<UserModel?> login(
       {required String email, required String password}) async {
     var request = {
@@ -76,14 +77,42 @@ class ApiClient {
     }
   }
 
-  // USER
+  //================================= USER =====================================
   Future<UserModel?> getUserInfo({required String id}) async {
-    Response response = await dioClient.get(ApiEndPoints.USER_INFO(id));
     try {
+      Response response = await dioClient.get(ApiEndPoints.USER_INFO(id));
       if (response.statusCode == 200) {
         UserModel userModel = UserModel.fromJson(response.data['data']);
         logSuccess('User info ${userModel.toJson().toString()}');
         return userModel;
+      } else {
+        throw NetworkException(
+            message: response.statusMessage, statusCode: response.statusCode);
+      }
+    } on DioException catch (e) {
+      logError(e);
+      return null;
+    }
+  }
+
+  //================================= POST =====================================
+  Future<List<PostModel>?> getNewFeeds({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      var query = {"page": page, "limit": limit};
+      Response response =
+          await dioClient.get(ApiEndPoints.NEW_FEEDS, queryParameters: query);
+      if (response.statusCode == 200) {
+        Iterable data = response.data["data"];
+        List<PostModel> result = data
+            .map(
+              (e) => PostModel.fromJson(e),
+            )
+            .toList();
+        logSuccess(result.length.toString());
+        return result;
       } else {
         throw NetworkException(
             message: response.statusMessage, statusCode: response.statusCode);

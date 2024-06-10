@@ -5,17 +5,12 @@ import 'package:blog/models/user_model.dart';
 import 'package:blog/modules/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MainState {
   Rx<UserModel?> userLogin = UserModel().obs;
   RxInt currentTab = AppKey.TAB_HOME.obs;
   List<Widget> pageList = [];
   late PageController pageViewController;
-  Rx<RefreshController> refreshController =
-      RefreshController(initialRefresh: false).obs;
-
-  Rx<ScrollController> homeScrollCtrl = ScrollController().obs;
 
   MainState() {
     pageList = [
