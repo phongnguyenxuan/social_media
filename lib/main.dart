@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 import 'bindings/app_binding.dart';
+import 'service/database/local_database_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,12 +42,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final SharedPreferencesManager sharedPreferencesManager =
+      SharedPreferencesManager.instance;
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       getPages: AppPages.pages,
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.LOGIN,
+      initialRoute: AppRoutes.SPLASH,
       initialBinding: AppBinding(),
       navigatorKey: Get.key,
       theme: ThemeData(useMaterial3: false),

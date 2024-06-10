@@ -1,13 +1,11 @@
-import 'package:blog/common/widget/app_bar/custom_appbar.dart';
+import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
 import 'package:blog/core/themes/color.dart';
-import 'package:blog/core/themes/textstyle.dart';
 import 'package:blog/modules/main/main_logic.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../common/widget/bottom_navigation_bar/gbutton.dart';
-import '../../common/widget/bottom_navigation_bar/gnav.dart';
+import '../../common/widget/bottom_navigation_bar/custom_bottom_bar.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -16,15 +14,29 @@ class MainView extends StatefulWidget {
   State<MainView> createState() => _MainViewState();
 }
 
-class _MainViewState extends State<MainView> {
+class _MainViewState extends State<MainView>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final logic = Get.find<MainLogic>();
   final state = Get.find<MainLogic>().state;
-  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    state.pageViewController = PageController();
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
-      appBar: const CustomAppBar(type: AppbarType.logo),
+      body: PageView(
+        controller: state.pageViewController,
+        onPageChanged: (value) {
+          state.currentTab.value = value;
+        },
+        children: state.pageList,
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
             border: Border(
@@ -32,43 +44,45 @@ class _MainViewState extends State<MainView> {
                     width: 1, color: AppColors.greyColor.withOpacity(0.6)))),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
-            child: GNav(
-              rippleColor: Colors.grey[300]!,
-              hoverColor: Colors.grey[100]!,
-              gap: 8,
-              activeColor: Colors.black,
-              iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              duration: Duration(milliseconds: 400),
-              tabBackgroundColor: Colors.grey[100]!,
-              color: Colors.black,
-              tabs: [
-                GButton(
-                  icon: Icons.home,
-                  text: 'Home',
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+              child: Obx(
+                () => CustomBottomNavigation(
+                  hoverColor: Colors.grey[100]!,
+                  gap: 8,
+                  activeColor: AppColors.primaryColor,
+                  iconSize: 20,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  duration: const Duration(milliseconds: 200),
+                  color: AppColors.iconColor,
+                  tabs: const [
+                    BottomButton(
+                      icon: CustomIcons.home_outline,
+                      activeIcon: CustomIcons.home_soild,
+                      iconActiveColor: AppColors.primaryColor,
+                    ),
+                    BottomButton(
+                      icon: CustomIcons.save_outline,
+                      activeIcon: CustomIcons.save_solid,
+                      iconActiveColor: AppColors.primaryColor,
+                    ),
+                    BottomButton(
+                      icon: CustomIcons.conversation_outline,
+                      activeIcon: CustomIcons.conversation_soild,
+                      iconActiveColor: AppColors.primaryColor,
+                    ),
+                    BottomButton(
+                      icon: CustomIcons.profile_outline,
+                      activeIcon: CustomIcons.profilee_soild,
+                      iconActiveColor: AppColors.primaryColor,
+                    ),
+                  ],
+                  selectedIndex: state.currentTab.value,
+                  onTabChange: (index) =>
+                      logic.onTabChange(selectTabIndex: index),
                 ),
-                GButton(
-                  icon: Icons.abc,
-                  text: 'Likes',
-                ),
-                GButton(
-                  icon: Icons.search,
-                  text: 'Search',
-                ),
-                GButton(
-                  icon: Icons.abc,
-                  text: 'Profile',
-                ),
-              ],
-              selectedIndex: _selectedIndex,
-              onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-            ),
-          ),
+              )),
         ),
       ),
     );
