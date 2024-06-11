@@ -18,6 +18,14 @@ class PostView extends StatefulWidget {
 }
 
 class _PostViewState extends State<PostView> {
+  PostModel postModel = PostModel();
+
+  @override
+  void initState() {
+    postModel = widget.postData;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,7 +51,7 @@ class _PostViewState extends State<PostView> {
                         height: 40,
                         color: AppColors.greyColor2,
                         child: CachedNetworkImage(
-                            imageUrl: widget.postData.author?.avatar ??
+                            imageUrl: postModel.author?.avatar ??
                                 AppKey.DEFAULT_AVATAR)),
                   ),
                 ),
@@ -53,21 +61,31 @@ class _PostViewState extends State<PostView> {
                 //name
                 RichText(
                   text: TextSpan(
-                      text: widget.postData.author?.name ?? "",
+                      text: postModel.author?.name ?? "",
                       style: AppTextStyle.headerStyle.copyWith(
                         fontSize: 15,
                         color: AppColors.darkBackground,
                       ),
                       children: [
                         TextSpan(
+                          text: postModel.author?.nickName == null
+                              ? ""
+                              : " @${postModel.author?.nickName}",
+                          style: AppTextStyle.nunito.copyWith(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w300,
+                            color: AppColors.iconColor.withOpacity(0.85),
+                          ),
+                        ),
+                        TextSpan(
                           text: "\n${timeago.format(
-                            DateTime.parse(widget.postData.createdAt ?? ""),
+                            DateTime.parse(postModel.createdAt ?? ""),
                             allowFromNow: true,
                           )}",
-                          style: AppTextStyle.robotoregular.copyWith(
-                              color: AppColors.greyColor2,
+                          style: AppTextStyle.header2Style.copyWith(
+                              color: AppColors.greyColor2.withOpacity(0.85),
                               fontSize: 14,
-                              fontWeight: FontWeight.w700),
+                              fontWeight: FontWeight.w400),
                         ),
                       ]),
                 ),
@@ -85,7 +103,7 @@ class _PostViewState extends State<PostView> {
             ),
           ),
           ReadMoreText(
-            text: widget.postData.content ?? "",
+            text: postModel.content ?? "",
             initialCharacterLimit: 500,
           ),
           bottomWidget()
@@ -98,14 +116,31 @@ class _PostViewState extends State<PostView> {
     return Container(
       child: Row(
         children: [
-          IconButton(
-            onPressed: () {},
-            splashRadius: 20,
-            icon: const Icon(
-              CustomIcons.heart_outline,
-              color: AppColors.greyColor2,
-              size: 20,
-            ),
+          //LIKE
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {},
+                splashRadius: 20,
+                icon: Icon(
+                  postModel.isLiked!
+                      ? CustomIcons.heart_soild
+                      : CustomIcons.heart_outline,
+                  color: postModel.isLiked!
+                      ? AppColors.likeColor
+                      : AppColors.greyColor2,
+                  size: 20,
+                ),
+              ),
+              Text(
+                (postModel.likeCount ?? 0).toString(),
+                style: AppTextStyle.nunito
+                    .copyWith(color: AppColors.iconColor, fontSize: 12),
+              )
+            ],
+          ),
+          const SizedBox(
+            width: 25,
           ),
           IconButton(
             onPressed: () {},
@@ -115,6 +150,9 @@ class _PostViewState extends State<PostView> {
               color: AppColors.greyColor2,
               size: 20,
             ),
+          ),
+          const SizedBox(
+            width: 25,
           ),
           IconButton(
             onPressed: () {},

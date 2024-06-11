@@ -11,5 +11,7 @@ class HomeState {
 
   Rx<ScrollController> homeScrollCtrl = ScrollController().obs;
   RxList<PostModel> listNewFeeds = <PostModel>[].obs;
+  RxBool canLoadMore = true.obs;
+  RxInt page = 1.obs;
   HomeState() {}
 }
