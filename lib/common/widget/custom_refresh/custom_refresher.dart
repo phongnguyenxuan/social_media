@@ -112,10 +112,10 @@ class CustomSmartRefresher extends StatelessWidget {
       child: child,
       header: header ?? const ClassicHeader(),
       footer: footer ??
-          ClassicFooter(
+          const ClassicFooter(
               // loadingText: AppStrings.loading.tr,
               // canLoadingText: AppStrings.pull_up_to_load_more.tr,
-              idleText: 'Không còn bài viết'),
+              idleText: 'No more posts'),
       enablePullDown: enablePullDown,
       enablePullUp: enablePullUp,
       enableTwoLevel: enableTwoLevel,

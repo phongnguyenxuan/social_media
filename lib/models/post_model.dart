@@ -50,13 +50,15 @@ class Author {
   String? sId;
   String? name;
   String? avatar;
+  String? nickName;
 
-  Author({this.sId, this.name, this.avatar});
+  Author({this.sId, this.name, this.avatar, this.nickName});
 
   Author.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
     avatar = json['avatar'];
+    nickName = json['nickName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +66,7 @@ class Author {
     data['_id'] = sId;
     data['name'] = name;
     data['avatar'] = avatar;
+    data['nickName'] = nickName;
     return data;
   }
 }

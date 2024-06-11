@@ -16,17 +16,58 @@ class HomeLogic extends GetxController {
     loadData();
   }
 
-  void loadData() async {
-    //getUserInfo();
-    getNewFeeds();
+  Future<void> loadData() async {
+    Future.wait([
+      getUserInfo(),
+      getNewFeeds(),
+    ]);
   }
 
-  void getNewFeeds() async {
-    state.listNewFeeds.value =
-        await apiClient.getNewFeeds(page: 1, limit: 10) ?? [];
+  Future<void> getNewFeeds({int page = 1, int limit = 10}) async {
+    try {
+      final result =
+          await apiClient.getNewFeeds(page: page, limit: limit) ?? [];
+      if (result.isNotEmpty) {
+        state.canLoadMore.value = true;
+      } else {
+        state.canLoadMore.value = false;
+      }
+      if (page == 1) {
+        state.listNewFeeds.value = result;
+      } else {
+        state.listNewFeeds.addAll(result);
+      }
+      state.listNewFeeds.refresh();
+    } catch (e) {
+      logError(e);
+      state.canLoadMore.value = false;
+    }
   }
 
-  void getUserInfo() async {
+  Future<void> loadMore() async {
+    try {
+      if (state.canLoadMore.value) {
+        state.page.value += 1;
+        await getNewFeeds(
+          page: state.page.value,
+          limit: 10,
+        );
+      }
+    } catch (e) {
+      logError(e);
+    } finally {
+      state.refreshController.value.loadComplete();
+    }
+  }
+
+  Future<void> pullToRefresh() async {
+    await loadData().then((value) {
+      state.refreshController.value.refreshCompleted();
+      state.refreshController.value.loadComplete();
+    });
+  }
+
+  Future<void> getUserInfo() async {
     String userId = sharedPreferencesManager.getString(PreferenceKey.user_id);
     state.userLogin.value = await apiClient.getUserInfo(id: userId);
     logSuccess(state.userLogin.value?.name);

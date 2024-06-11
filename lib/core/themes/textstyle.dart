@@ -18,4 +18,6 @@ class AppTextStyle {
   static TextStyle header2Style = GoogleFonts.inter(
     fontWeight: FontWeight.w500,
   );
+
+  static TextStyle nunito = GoogleFonts.nunito();
 }

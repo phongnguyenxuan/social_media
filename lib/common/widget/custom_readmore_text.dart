@@ -47,19 +47,19 @@ class _ReadMoreTextState extends State<ReadMoreText> {
           selectable: false,
           softLineBreak: true,
           styleSheet: MarkdownStyleSheet(
-            p: AppTextStyle.robotoregular
+            p: AppTextStyle.nunito
                 .copyWith(fontSize: 16, color: Colors.black87),
-            h1: AppTextStyle.robotoregular
+            h1: AppTextStyle.nunito
                 .copyWith(fontSize: 24, color: Colors.black87),
-            h2: AppTextStyle.robotoregular
+            h2: AppTextStyle.nunito
                 .copyWith(fontSize: 22, color: Colors.black87),
-            h3: AppTextStyle.robotoregular
+            h3: AppTextStyle.nunito
                 .copyWith(fontSize: 20, color: Colors.black87),
-            h4: AppTextStyle.robotoregular
+            h4: AppTextStyle.nunito
                 .copyWith(fontSize: 18, color: Colors.black87),
-            h5: AppTextStyle.robotoregular
+            h5: AppTextStyle.nunito
                 .copyWith(fontSize: 16, color: Colors.black87),
-            h6: AppTextStyle.robotoregular
+            h6: AppTextStyle.nunito
                 .copyWith(fontSize: 14, color: Colors.black87),
             // code: TextStyle(
             //     color: Colors.purple, fontFamily: 'Courier', fontSize: 14),
@@ -81,7 +81,7 @@ class _ReadMoreTextState extends State<ReadMoreText> {
               },
               child: Text(
                 "Read more",
-                style: AppTextStyle.robotoregular.copyWith(
+                style: AppTextStyle.nunito.copyWith(
                   fontSize: 16,
                   color: AppColors.primaryColor,
                 ),

@@ -1,5 +1,6 @@
 import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
 import 'package:blog/common/widget/custom_refresh/custom_refresher.dart';
+import 'package:blog/common/widget/shimmer/shimmer_widget.dart';
 import 'package:blog/core/constants/env.dart';
 import 'package:blog/core/themes/color.dart';
 import 'package:blog/core/themes/textstyle.dart';
@@ -19,6 +20,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final logic = Get.find<HomeLogic>();
   final state = Get.find<HomeLogic>().state;
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,8 @@ class _HomeViewState extends State<HomeView> {
             enablePullDown: true,
             enablePullUp: true,
             scrollController: state.homeScrollCtrl.value,
+            onLoading: logic.loadMore,
+            onRefresh: logic.pullToRefresh,
             child: CustomScrollView(
               controller: state.homeScrollCtrl.value,
               physics: const BouncingScrollPhysics(),
@@ -51,23 +55,48 @@ class _HomeViewState extends State<HomeView> {
                   child: storyWidget(),
                 ),
                 SliverToBoxAdapter(
-                  child: ListView.builder(
-                    controller: state.homeScrollCtrl.value,
-                    itemCount: state.listNewFeeds.length,
-                    shrinkWrap: true,
-                    primary: false,
-                    itemBuilder: (context, index) {
-                      return PostView(
-                        postData: state.listNewFeeds[index],
-                      );
-                    },
-                  ),
+                  child: listPostWidget(),
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget listPostWidget() {
+    if (state.listNewFeeds.isEmpty) {
+      return ListView.builder(
+        controller: state.homeScrollCtrl.value,
+        itemCount: 3,
+        shrinkWrap: true,
+        primary: false,
+        itemBuilder: (context, index) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: const BoxDecoration(
+                border: Border(
+              top: BorderSide(width: 2, color: AppColors.postBorderColor),
+            )),
+            child: const ShimmerWidget(
+              type: ShimmerType.POST,
+            ),
+          );
+        },
+      );
+    }
+    print("======== ${state.listNewFeeds.first.content}");
+    return ListView.builder(
+      controller: state.homeScrollCtrl.value,
+      itemCount: state.listNewFeeds.length,
+      shrinkWrap: true,
+      primary: false,
+      itemBuilder: (context, index) {
+        return PostView(
+          postData: state.listNewFeeds[index],
+        );
+      },
     );
   }
 
@@ -89,7 +118,7 @@ class _HomeViewState extends State<HomeView> {
                   child: Container(
                     width: 60,
                     height: 60,
-                    color: Colors.amber,
+                    color: AppColors.greyColor2,
                   ),
                 ),
                 const SizedBox(

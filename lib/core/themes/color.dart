@@ -17,6 +17,9 @@ class AppColors {
   static const Color iconColor = Color(0xFF393D53);
   static const Color greenColor = Color(0xFF5DC473);
   static const Color postBorderColor = Color(0xFFF5F5F5);
+  static const Color likeColor = Color(0xFFc75a62);
+  static Color shimmerBaseColor = greyColor2.withOpacity(0.65);
+  static Color shimmerHighlightColor = greyColor2.withOpacity(0.25);
 
   static const LinearGradient logoGradient =
       LinearGradient(colors: [blueGradient, purpleGradient]);
