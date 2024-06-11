@@ -1,5 +1,4 @@
 import 'package:blog/core/constants/preference_key.dart';
-import 'package:blog/models/post_model.dart';
 import 'package:blog/modules/home/home_state.dart';
 import 'package:blog/service/database/local_database_service.dart';
 import 'package:blog/service/logger/logger.dart';

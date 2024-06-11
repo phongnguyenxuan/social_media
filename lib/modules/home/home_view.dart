@@ -40,7 +40,7 @@ class _HomeViewState extends State<HomeView> {
                   elevation: 0,
                   automaticallyImplyLeading: false,
                   floating: true,
-                  snap: false,
+                  snap: true,
                   flexibleSpace: CustomAppBar(type: AppbarType.logo),
                   toolbarHeight: kToolbarHeight + 20,
                 ),
@@ -74,13 +74,15 @@ class _HomeViewState extends State<HomeView> {
   Container storyWidget() {
     return Container(
       height: 100,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+      ),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 10,
         itemBuilder: (context, index) {
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
                 ClipOval(

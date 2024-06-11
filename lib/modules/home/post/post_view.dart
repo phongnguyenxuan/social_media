@@ -1,11 +1,13 @@
 import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
 import 'package:blog/core/constants/env.dart';
 import 'package:blog/core/themes/color.dart';
+import 'package:blog/core/themes/textstyle.dart';
 import 'package:blog/models/post_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+
+import '../../../common/widget/custom_readmore_text.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostView extends StatefulWidget {
   final PostModel postData;
@@ -46,10 +48,29 @@ class _PostViewState extends State<PostView> {
                   ),
                 ),
                 const SizedBox(
-                  width: 5,
+                  width: 10,
                 ),
                 //name
-                Text(widget.postData.author?.name ?? ""),
+                RichText(
+                  text: TextSpan(
+                      text: widget.postData.author?.name ?? "",
+                      style: AppTextStyle.headerStyle.copyWith(
+                        fontSize: 15,
+                        color: AppColors.darkBackground,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: "\n${timeago.format(
+                            DateTime.parse(widget.postData.createdAt ?? ""),
+                            allowFromNow: true,
+                          )}",
+                          style: AppTextStyle.robotoregular.copyWith(
+                              color: AppColors.greyColor2,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ]),
+                ),
                 const Spacer(),
                 IconButton(
                   splashRadius: 15,
@@ -63,11 +84,9 @@ class _PostViewState extends State<PostView> {
               ],
             ),
           ),
-          Markdown(
-            data: widget.postData.content ?? "",
-            physics: const NeverScrollableScrollPhysics(),
-            softLineBreak: true,
-            shrinkWrap: true,
+          ReadMoreText(
+            text: widget.postData.content ?? "",
+            initialCharacterLimit: 500,
           ),
           bottomWidget()
         ],
