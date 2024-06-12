@@ -12,15 +12,21 @@ class DioClient {
   static final DioClient instance = DioClient._internal();
 
   late final Dio _dio;
+  late final Dio _dio2;
   late final SharedPreferences _sharedPreferences;
 
   Dio get dio => _dio;
+
+  Dio get dio2 => _dio2;
 
   factory DioClient() {
     return instance;
   }
 
   DioClient._internal() {
+    _dio2 = Dio(BaseOptions(
+      baseUrl: "https://api.cloudinary.com/v1_1/dtgrixzn8/image/upload",
+    ));
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiEndPoints.BASE_URL,
@@ -204,6 +210,32 @@ class DioClient {
         cancelToken: cancelToken,
       );
       return response.data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Post:----------------------------------------------------------------------
+  Future<dynamic> uploadImage(
+    String uri, {
+    required data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    try {
+      final Response response = await _dio2.post(
+        uri,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response;
     } catch (e) {
       rethrow;
     }

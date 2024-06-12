@@ -1,5 +1,6 @@
 import 'package:blog/core/constants/preference_key.dart';
 import 'package:blog/modules/home/home_state.dart';
+import 'package:blog/routes/app_routes.dart';
 import 'package:blog/service/database/local_database_service.dart';
 import 'package:blog/service/logger/logger.dart';
 import 'package:blog/service/network/apis/api_client.dart';
@@ -17,10 +18,12 @@ class HomeLogic extends GetxController {
   }
 
   Future<void> loadData() async {
+    state.isLoadingData.value = true;
     Future.wait([
       getUserInfo(),
       getNewFeeds(),
     ]);
+    state.isLoadingData.value = false;
   }
 
   Future<void> getNewFeeds({int page = 1, int limit = 10}) async {
@@ -71,5 +74,12 @@ class HomeLogic extends GetxController {
     String userId = sharedPreferencesManager.getString(PreferenceKey.user_id);
     state.userLogin.value = await apiClient.getUserInfo(id: userId);
     logSuccess(state.userLogin.value?.name);
+  }
+
+  void pushToCreatePost() {
+    Get.toNamed(
+      AppRoutes.CREATE_POST,
+      arguments: {"user": state.userLogin.value},
+    );
   }
 }

@@ -10,4 +10,6 @@ class AppRoutes {
   static const String MAIN = "/main";
 
   static const String FORGOT_PASSWORD = "/forgot_password";
+
+  static const String CREATE_POST = "/create_post";
 }
