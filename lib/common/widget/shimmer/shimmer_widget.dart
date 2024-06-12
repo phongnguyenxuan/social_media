@@ -2,6 +2,7 @@
 
 import 'package:blog/core/themes/color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
 enum ShimmerType { LIST, DEFAULT, CUSTOM, POST }
@@ -13,21 +14,23 @@ class ShimmerWidget extends StatelessWidget {
       this.height,
       this.itemCount,
       required this.type,
-      this.child});
+      this.child,
+      this.enabled});
   final double? width;
   final double? height;
   final int? itemCount;
   final ShimmerType type;
   final Widget? child;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
     // if (type == ShimmerType.LIST) {
     //   return listShimmer();
     // }
-    // if (type == ShimmerType.DEFAULT) {
-    //   return defaultShimmer();
-    // }
+    if (type == ShimmerType.DEFAULT) {
+      return defaultShimmer(child: child, enabled: enabled ?? false);
+    }
     if (type == ShimmerType.POST) {
       return postShimmer();
     }
@@ -76,22 +79,16 @@ class ShimmerWidget extends StatelessWidget {
   //   );
   // }
 
-  // Widget defaultShimmer() {
-  //   return Shimmer.fromColors(
-  //     baseColor: AppColors.shimmerBaseColor,
-  //     highlightColor: AppColors.shimmerHighlightColor,
-  //     child: Container(
-  //       width: width ?? 0.44,
-  //       height: height,
-  //       padding: const EdgeInsets.only(bottom: 12.0),
-  //       decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(6),
-  //           color: AppColors.White,
-  //           border: Border.all(color: AppColors.Gray17)),
-  //       margin: EdgeInsets.only(right: 8),
-  //     ),
-  //   );
-  // }
+  Widget defaultShimmer({required Widget? child, required bool enabled}) {
+    return enabled
+        ? Shimmer.fromColors(
+            baseColor: AppColors.shimmerBaseColor,
+            highlightColor: AppColors.shimmerHighlightColor,
+            child: child ?? Container())
+        : Container(
+            child: child,
+          );
+  }
 
   Widget postShimmer() {
     return Shimmer.fromColors(

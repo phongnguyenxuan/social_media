@@ -7,5 +7,7 @@ class AppKey {
   static const TAB_ME = 3;
 
   static const DEFAULT_AVATAR =
-      "https://res.cloudinary.com/dckxgux3k/image/upload/v1690426439/Avatar/avatar-icon-2_blug9u.png";
+      "https://res.cloudinary.com/dtgrixzn8/image/upload/v1718178855/User/default_avatar.png";
+
+  static const PLACE_HOLDER_IMAGE = "https://www.iconsdb.com/icons/preview/gray/square-xxl.png";
 }

@@ -3,6 +3,7 @@ import 'package:blog/modules/auth/register/register_binding.dart';
 import 'package:blog/modules/auth/register/register_view.dart';
 import 'package:blog/modules/auth/forgot_password/forgot_binding.dart';
 import 'package:blog/modules/auth/forgot_password/forgot_view.dart';
+import 'package:blog/modules/home/create_post/create_post_view.dart';
 import 'package:blog/modules/main/main_binding.dart';
 import 'package:blog/modules/main/main_view.dart';
 import 'package:blog/modules/splash/splash_binding.dart';
@@ -37,6 +38,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.FORGOT_PASSWORD,
       page: () => const ForgotPasswordView(),
+      binding: ForgotPasswordBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.CREATE_POST,
+      page: () => const CreatePostView(),
       binding: ForgotPasswordBinding(),
     ),
   ];

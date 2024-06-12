@@ -51,7 +51,9 @@ class _HomeViewState extends State<HomeView>
                   toolbarHeight: kToolbarHeight + 20,
                 ),
                 SliverToBoxAdapter(
-                  child: addPostHeader(),
+                  child: IgnorePointer(
+                    ignoring: state.isLoadingData.value,
+                    child: addPostHeader()),
                 ),
                 SliverToBoxAdapter(
                   child: storyWidget(),
@@ -140,21 +142,36 @@ class _HomeViewState extends State<HomeView>
 
   Container addPostHeader() {
     return Container(
-      margin: EdgeInsets.only(top: 10, bottom: 20),
+      margin: const EdgeInsets.only(top: 10, bottom: 20),
       child: Row(
         children: [
           const SizedBox(
             width: 10,
           ),
           // avatar
-          ClipOval(
-            child: Container(
-              width: 45,
-              height: 45,
-              decoration: const BoxDecoration(color: AppColors.greyColor2),
-              child: CachedNetworkImage(
-                imageUrl:
-                    state.userLogin.value?.avatar ?? AppKey.DEFAULT_AVATAR,
+          ShimmerWidget(
+            type: ShimmerType.DEFAULT,
+            enabled: state.isLoadingData.value,
+            child: ClipOval(
+              child: Container(
+                width: 45,
+                height: 45,
+                decoration: const BoxDecoration(color: AppColors.greyColor2),
+                child: CachedNetworkImage(
+                  imageUrl: state.userLogin.value?.avatar ?? AppKey.PLACE_HOLDER_IMAGE,
+                  placeholder: (context, url) {
+                    return ShimmerWidget(
+                      type: ShimmerType.DEFAULT,
+                      enabled: true,
+                      child: Container(
+                        width: 45,
+                        height: 45,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.white),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -165,7 +182,9 @@ class _HomeViewState extends State<HomeView>
           Expanded(
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
-              onTap: () {},
+              onTap: () {
+                logic.pushToCreatePost();
+              },
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 15),

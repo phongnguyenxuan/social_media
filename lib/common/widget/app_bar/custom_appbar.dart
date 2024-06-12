@@ -8,7 +8,17 @@ enum AppbarType { normal, logo }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppbarType type;
-  const CustomAppBar({super.key, required this.type});
+  final Widget? title;
+  final bool? centerTitle;
+  final List<Widget>? actions;
+  final double? elevation;
+  const CustomAppBar(
+      {super.key,
+      required this.type,
+      this.title,
+      this.centerTitle,
+      this.actions,
+      this.elevation});
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +45,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         );
       case AppbarType.normal:
         return AppBar(
-          backgroundColor: AppColors.lightBackground,
-          elevation: 0,
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+          elevation: elevation ?? 0,
+          title: title,
+          centerTitle: centerTitle,
           leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              splashRadius: 25,
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.black,
-                size: 45,
-              )),
+            onPressed: () {
+              Get.back();
+            },
+            splashRadius: 20,
+            icon: const Icon(
+              CustomIcons.back,
+              color: Colors.black,
+              size: 20,
+            ),
+          ),
+          actions: actions,
         );
     }
   }
