@@ -19,11 +19,13 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView>
+    with AutomaticKeepAliveClientMixin {
   final logic = Get.find<HomeLogic>();
   final state = Get.find<HomeLogic>().state;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.lightBackground,
@@ -34,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
             enablePullUp: true,
             scrollController: state.homeScrollCtrl.value,
             onLoading: logic.loadMore,
-            onRefresh: logic.pullToRefresh,
+            onRefresh: () => logic.pullToRefresh(),
             child: CustomScrollView(
               controller: state.homeScrollCtrl.value,
               physics: const BouncingScrollPhysics(),
@@ -86,7 +88,6 @@ class _HomeViewState extends State<HomeView> {
         },
       );
     }
-    print("======== ${state.listNewFeeds.first.content}");
     return ListView.builder(
       controller: state.homeScrollCtrl.value,
       itemCount: state.listNewFeeds.length,
@@ -94,6 +95,7 @@ class _HomeViewState extends State<HomeView> {
       primary: false,
       itemBuilder: (context, index) {
         return PostView(
+          key: ObjectKey(state.listNewFeeds[index].sId),
           postData: state.listNewFeeds[index],
         );
       },
@@ -195,4 +197,7 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -61,26 +61,19 @@ class _ReadMoreTextState extends State<ReadMoreText> {
                 .copyWith(fontSize: 16, color: Colors.black87),
             h6: AppTextStyle.nunito
                 .copyWith(fontSize: 14, color: Colors.black87),
-            // code: TextStyle(
-            //     color: Colors.purple, fontFamily: 'Courier', fontSize: 14),
-            codeblockPadding: const EdgeInsets.all(8),
-            codeblockDecoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(4),
-            ),
           ),
         ),
-        if (!isExpanded && remainingPart.isNotEmpty)
+        if (remainingPart.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: InkWell(
               onTap: () {
                 setState(() {
-                  isExpanded = true;
+                  isExpanded = !isExpanded;
                 });
               },
               child: Text(
-                "Read more",
+                !isExpanded ? "See more" : "Hide less",
                 style: AppTextStyle.nunito.copyWith(
                   fontSize: 16,
                   color: AppColors.primaryColor,

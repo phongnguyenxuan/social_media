@@ -30,12 +30,16 @@ class _MainViewState extends State<MainView>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
-      body: PageView(
-        controller: state.pageViewController,
-        onPageChanged: (value) {
-          state.currentTab.value = value;
-        },
-        children: state.pageList,
+      body: ScrollConfiguration(
+        behavior: const ScrollBehavior().copyWith(overscroll: false),
+        child: PageView(
+          controller: state.pageViewController,
+          physics: const PageScrollPhysics(),
+          onPageChanged: (value) {
+            state.currentTab.value = value;
+          },
+          children: state.pageList,
+        ),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
