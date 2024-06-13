@@ -2,6 +2,7 @@ import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
 import 'package:blog/common/widget/logo.dart';
 import 'package:blog/core/themes/color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 enum AppbarType { normal, logo }
@@ -12,13 +13,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? centerTitle;
   final List<Widget>? actions;
   final double? elevation;
+  final void Function()? onTapLogo;
   const CustomAppBar(
       {super.key,
       required this.type,
       this.title,
       this.centerTitle,
       this.actions,
-      this.elevation});
+      this.elevation,
+      this.onTapLogo});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                 child: Row(
                   children: [
-                    const Logo(),
+                    GestureDetector(onTap: onTapLogo, child: const Logo()),
                     const Spacer(),
                     IconButton(
                         onPressed: () {}, icon: const Icon(CustomIcons.search))

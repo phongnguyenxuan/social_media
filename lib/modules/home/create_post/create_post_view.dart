@@ -46,11 +46,17 @@ class _CreatePostViewState extends State<CreatePostView> {
         child: Row(
           children: [
             iconButton(
-                onPressed: () {
-                  logic.pickImage();
-                },
-                icon: CustomIcons.picture),
-            iconButton(onPressed: () {}, icon: CustomIcons.gif),
+              onPressed: () {
+                logic.pickImage();
+              },
+              color: AppColors.greenColor,
+              icon: CustomIcons.picture,
+            ),
+            iconButton(
+              onPressed: () {},
+              icon: CustomIcons.gif,
+              color: Colors.amber,
+            ),
           ],
         ),
       ),
@@ -63,7 +69,11 @@ class _CreatePostViewState extends State<CreatePostView> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextFormField(
+                controller: state.contentController,
                 maxLines: null,
+                onChanged: (value) {
+                  logic.validatePost(value);
+                },
                 decoration: InputDecoration(
                     hintText: "What's on your mind?",
                     hintStyle: AppTextStyle.nunito
@@ -83,6 +93,9 @@ class _CreatePostViewState extends State<CreatePostView> {
               () => state.imageFiles.isNotEmpty
                   ? Container(
                       height: 400,
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 20,
+                      ),
                       width: MediaQuery.of(context).size.width,
                       child: MultipleImageView(
                         type: ImageType.local,
@@ -98,10 +111,15 @@ class _CreatePostViewState extends State<CreatePostView> {
   }
 
   IconButton iconButton(
-      {required void Function()? onPressed, required IconData? icon}) {
+      {required void Function()? onPressed,
+      required IconData? icon,
+      required Color color}) {
     return IconButton(
       onPressed: onPressed,
-      icon: Icon(icon),
+      icon: Icon(
+        icon,
+        color: color,
+      ),
     );
   }
 
@@ -171,23 +189,25 @@ class _CreatePostViewState extends State<CreatePostView> {
       actions: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          child: CustomButton(
-            onTap: () {
-              logic.uploadImage();
-            },
-            radius: 20,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            buttonType: ButtonType.full,
-            child: Center(
-              child: Text(
-                "POST",
-                style: AppTextStyle.nunito.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
+          child: Obx(() => CustomButton(
+                onTap: !state.isValid.value
+                    ? null
+                    : () {
+                        logic.createPost();
+                      },
+                radius: 20,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                buttonType: ButtonType.full,
+                child: Center(
+                  child: Text(
+                    "POST",
+                    style: AppTextStyle.nunito.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
+              )),
         )
       ],
     );

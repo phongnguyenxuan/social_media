@@ -122,4 +122,25 @@ class ApiClient {
       return null;
     }
   }
+
+  Future<int> createPost({
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      Response response =
+          await dioClient.post(ApiEndPoints.CREATE_POST, data: data);
+      if (response.statusCode == 200) {
+        int result = response.statusCode ?? 200;
+
+        logSuccess(response.statusCode);
+        return result;
+      } else {
+        throw NetworkException(
+            message: response.statusMessage, statusCode: response.statusCode);
+      }
+    } on DioException catch (e) {
+      logError(e.response?.data);
+      return e.response?.statusCode ?? 400;
+    }
+  }
 }

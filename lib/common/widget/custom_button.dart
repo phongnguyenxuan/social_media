@@ -53,7 +53,8 @@ class CustomButton extends StatelessWidget {
       height: height,
       padding: EdgeInsets.all(boderWidth ?? 2),
       decoration: BoxDecoration(
-        gradient: AppColors.logoGradient,
+        gradient: (onTap != null) ? AppColors.logoGradient : null,
+        color: (onTap == null) ? AppColors.greyColor2 : null,
         borderRadius: BorderRadius.circular(radius ?? 30),
       ),
       child: Container(

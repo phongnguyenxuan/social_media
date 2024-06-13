@@ -64,6 +64,7 @@ class HomeLogic extends GetxController {
   }
 
   Future<void> pullToRefresh() async {
+    state.refreshController.value.requestRefresh();
     await loadData().then((value) {
       state.refreshController.value.refreshCompleted();
       state.refreshController.value.loadComplete();
@@ -76,10 +77,10 @@ class HomeLogic extends GetxController {
     logSuccess(state.userLogin.value?.name);
   }
 
-  void pushToCreatePost() {
+  void pushToCreatePost({required String type}) {
     Get.toNamed(
       AppRoutes.CREATE_POST,
-      arguments: {"user": state.userLogin.value},
+      arguments: {"type": type, "user": state.userLogin.value},
     );
   }
 }

@@ -18,4 +18,5 @@ class ApiEndPoints {
 
   //POST
   static const String NEW_FEEDS = "/post/news";
+  static const String CREATE_POST = "/post/create";
 }
