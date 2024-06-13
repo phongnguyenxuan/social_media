@@ -8,6 +8,6 @@ class MainBinding extends Bindings {
   void dependencies() {
     Get.lazyPut(() => MainLogic());
     Get.lazyPut(() => HomeLogic());
-   // Get.lazyPut(() => CreatePostLogic());
+    Get.lazyPut(() => CreatePostLogic());
   }
 }

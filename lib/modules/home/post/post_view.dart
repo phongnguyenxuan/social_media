@@ -1,4 +1,6 @@
 import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
+import 'package:blog/common/widget/multi_image_view/multiple_image_view.dart';
+import 'package:blog/common/widget/multi_image_view/smart_image.dart';
 import 'package:blog/core/constants/env.dart';
 import 'package:blog/core/themes/color.dart';
 import 'package:blog/core/themes/textstyle.dart';
@@ -106,6 +108,20 @@ class _PostViewState extends State<PostView> {
             text: postModel.content ?? "",
             initialCharacterLimit: 500,
           ),
+          //IMAGE
+          (postModel.images != null && postModel.images!.isNotEmpty)
+              ? Container(
+                  height: 300,
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 20,
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  child: MultipleImageView(
+                    type: ImageType.network,
+                    imageUrls: postModel.images,
+                  ),
+                )
+              : Container(),
           bottomWidget()
         ],
       ),

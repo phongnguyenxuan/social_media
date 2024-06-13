@@ -38,22 +38,33 @@ class _HomeViewState extends State<HomeView>
             onLoading: logic.loadMore,
             onRefresh: () => logic.pullToRefresh(),
             child: CustomScrollView(
-              controller: state.homeScrollCtrl.value,
               physics: const BouncingScrollPhysics(),
               slivers: [
-                const SliverAppBar(
+                SliverAppBar(
                   backgroundColor: AppColors.lightBackground,
                   elevation: 0,
                   automaticallyImplyLeading: false,
                   floating: true,
                   snap: true,
-                  flexibleSpace: CustomAppBar(type: AppbarType.logo),
+                  flexibleSpace: CustomAppBar(
+                      onTapLogo: () {
+                        if (state.homeScrollCtrl.value.offset != 0.0) {
+                          state.homeScrollCtrl.value.animateTo(
+                            0.0,
+                            duration: const Duration(seconds: 1),
+                            curve: Curves.fastOutSlowIn,
+                          );
+                        } else {
+                          logic.pullToRefresh();
+                        }
+                      },
+                      type: AppbarType.logo),
                   toolbarHeight: kToolbarHeight + 20,
                 ),
                 SliverToBoxAdapter(
                   child: IgnorePointer(
-                    ignoring: state.isLoadingData.value,
-                    child: addPostHeader()),
+                      ignoring: state.isLoadingData.value,
+                      child: addPostHeader()),
                 ),
                 SliverToBoxAdapter(
                   child: storyWidget(),
@@ -72,7 +83,6 @@ class _HomeViewState extends State<HomeView>
   Widget listPostWidget() {
     if (state.listNewFeeds.isEmpty) {
       return ListView.builder(
-        controller: state.homeScrollCtrl.value,
         itemCount: 3,
         shrinkWrap: true,
         primary: false,
@@ -91,7 +101,6 @@ class _HomeViewState extends State<HomeView>
       );
     }
     return ListView.builder(
-      controller: state.homeScrollCtrl.value,
       itemCount: state.listNewFeeds.length,
       shrinkWrap: true,
       primary: false,
@@ -158,7 +167,8 @@ class _HomeViewState extends State<HomeView>
                 height: 45,
                 decoration: const BoxDecoration(color: AppColors.greyColor2),
                 child: CachedNetworkImage(
-                  imageUrl: state.userLogin.value?.avatar ?? AppKey.PLACE_HOLDER_IMAGE,
+                  imageUrl: state.userLogin.value?.avatar ??
+                      AppKey.PLACE_HOLDER_IMAGE,
                   placeholder: (context, url) {
                     return ShimmerWidget(
                       type: ShimmerType.DEFAULT,
@@ -183,7 +193,7 @@ class _HomeViewState extends State<HomeView>
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
               onTap: () {
-                logic.pushToCreatePost();
+                logic.pushToCreatePost(type: "normal");
               },
               child: Container(
                 padding:
@@ -205,7 +215,9 @@ class _HomeViewState extends State<HomeView>
           // pick image
           IconButton(
             splashRadius: 20,
-            onPressed: () {},
+            onPressed: () {
+              logic.pushToCreatePost(type: "image");
+            },
             icon: const Icon(
               CustomIcons.add_image,
               color: AppColors.greenColor,

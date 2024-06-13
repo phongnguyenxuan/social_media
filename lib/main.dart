@@ -1,3 +1,4 @@
+import 'package:blog/core/themes/color.dart';
 import 'package:blog/firebase_options.dart';
 import 'package:blog/routes/app_pages.dart';
 import 'package:blog/routes/app_routes.dart';
@@ -20,16 +21,18 @@ void main() async {
 
 void configLoading() {
   EasyLoading.instance
-    ..displayDuration = const Duration(milliseconds: 2000)
-    ..indicatorType = EasyLoadingIndicatorType.ring
+    ..displayDuration = const Duration(milliseconds: 1000)
     ..loadingStyle = EasyLoadingStyle.custom
-    ..indicatorSize = 45.0
+    ..indicatorType = EasyLoadingIndicatorType.circle
+    ..indicatorSize = 50.0
     ..radius = 10.0
-    ..progressColor = Colors.yellow
-    ..backgroundColor = Colors.green
-    ..indicatorColor = Colors.yellow
-    ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..backgroundColor = Colors.transparent
+    ..indicatorColor = AppColors.blueGradient
+    ..textColor = Colors.transparent
+    ..maskColor = Colors.transparent
+    ..boxShadow = [
+      const BoxShadow(color: Colors.transparent)
+    ]
     ..userInteractions = true
     ..dismissOnTap = false;
 }

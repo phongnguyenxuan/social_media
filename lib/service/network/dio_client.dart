@@ -26,12 +26,14 @@ class DioClient {
   DioClient._internal() {
     _dio2 = Dio(BaseOptions(
       baseUrl: "https://api.cloudinary.com/v1_1/dtgrixzn8/image/upload",
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
     ));
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiEndPoints.BASE_URL,
-        connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 15),
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
       ),
     );
 

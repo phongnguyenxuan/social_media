@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'smart_image.dart';
@@ -45,13 +46,16 @@ class MultipleImageView extends StatelessWidget {
 
   List<Widget> _singleImageView() {
     return [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: SmartImage(
-          type: type,
-          imageUrl: imageUrls?.first,
-          file: files?.first.path,
-          fit: BoxFit.fill,
+      Expanded(
+        flex: 1,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: SmartImage(
+            type: type,
+            imageUrl: imageUrls?.first,
+            file: files?.first.path,
+            fit: BoxFit.fill,
+          ),
         ),
       ),
     ];
