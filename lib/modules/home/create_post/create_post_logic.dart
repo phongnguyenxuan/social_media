@@ -52,6 +52,7 @@ class CreatePostLogic extends GetxController {
           String imageUrl = await _uploadImage(imageFile);
           imagesUrl.add(imageUrl);
         }
+        state.listImageUrl.value = imagesUrl;
         logSuccess("Uploaded Image URLs: $imagesUrl");
       }
     } catch (e) {
