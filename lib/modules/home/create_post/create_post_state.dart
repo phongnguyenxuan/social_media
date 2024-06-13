@@ -6,6 +6,7 @@ class CreatePostState {
   UserModel userModel = Get.arguments["user"];
 
   RxList<XFile> imageFiles = <XFile>[].obs;
+  RxList<String> listImageUrl = <String>[].obs;
 
-  CreatePostState(){}
+  CreatePostState() {}
 }

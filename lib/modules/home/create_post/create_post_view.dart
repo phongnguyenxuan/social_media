@@ -1,6 +1,7 @@
 import 'package:blog/common/widget/app_bar/custom_appbar.dart';
 import 'package:blog/common/widget/custom_button.dart';
 import 'package:blog/common/widget/custom_icons/custom_icons_icons.dart';
+import 'package:blog/common/widget/multi_image_view/smart_image.dart';
 import 'package:blog/common/widget/shimmer/shimmer_widget.dart';
 import 'package:blog/core/constants/env.dart';
 import 'package:blog/core/themes/color.dart';
@@ -10,6 +11,8 @@ import 'package:blog/modules/home/create_post/create_post_state.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../common/widget/multi_image_view/multiple_image_view.dart';
 
 class CreatePostView extends StatefulWidget {
   const CreatePostView({super.key});
@@ -60,6 +63,7 @@ class _CreatePostViewState extends State<CreatePostView> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextFormField(
+                maxLines: null,
                 decoration: InputDecoration(
                     hintText: "What's on your mind?",
                     hintStyle: AppTextStyle.nunito
@@ -72,6 +76,21 @@ class _CreatePostViewState extends State<CreatePostView> {
                     focusedErrorBorder: InputBorder.none),
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            Obx(
+              () => state.imageFiles.isNotEmpty
+                  ? Container(
+                      height: 400,
+                      width: MediaQuery.of(context).size.width,
+                      child: MultipleImageView(
+                        type: ImageType.local,
+                        files: state.imageFiles,
+                      ),
+                    )
+                  : Container(),
+            )
           ],
         ),
       ),
