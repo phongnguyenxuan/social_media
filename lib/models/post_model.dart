@@ -7,6 +7,7 @@ class PostModel {
   bool? isLiked;
   String? createdAt;
   Author? author;
+  String? folderId;
 
   PostModel(
       {this.sId,
@@ -16,6 +17,7 @@ class PostModel {
       this.commentLength,
       this.isLiked,
       this.createdAt,
+      this.folderId,
       this.author});
 
   PostModel.fromJson(Map<String, dynamic> json) {
@@ -26,8 +28,8 @@ class PostModel {
     commentLength = json['commentLength'];
     isLiked = json['isLiked'];
     createdAt = json['createdAt'];
-    author =
-        json['author'] != null ? Author.fromJson(json['author']) : null;
+    author = json['author'] != null ? Author.fromJson(json['author']) : null;
+    folderId = json['folderId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +41,7 @@ class PostModel {
     data['commentLength'] = commentLength;
     data['isLiked'] = isLiked;
     data['createdAt'] = createdAt;
+    data['folderId'] = folderId;
     if (author != null) {
       data['author'] = author!.toJson();
     }

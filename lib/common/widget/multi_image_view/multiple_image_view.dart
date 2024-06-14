@@ -54,7 +54,7 @@ class MultipleImageView extends StatelessWidget {
             type: type,
             imageUrl: imageUrls?.first,
             file: files?.first.path,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
           ),
         ),
       ),
