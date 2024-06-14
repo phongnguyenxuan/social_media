@@ -5,13 +5,16 @@ import 'package:blog/service/network/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/route_manager.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class CreatePostLogic extends GetxController {
   final state = CreatePostState();
   final imagePicker = ImagePicker();
   final DioClient dioClient = DioClient.instance;
   ApiClient apiClient = ApiClient();
+  final uid = const Uuid();
 
   @override
   onReady() {
@@ -34,12 +37,12 @@ class CreatePostLogic extends GetxController {
   }
 
   //upload image to Cloudinary
-  Future<String> _uploadImage(XFile imageFile) async {
+  Future<String> _uploadImage(XFile imageFile, String idFolder) async {
     FormData formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(imageFile.path,
           filename: imageFile.name),
       'upload_preset': 'sxicpbes',
-      'folder': 'posts'
+      'folder': "posts/$idFolder"
     });
 
     try {
@@ -55,14 +58,14 @@ class CreatePostLogic extends GetxController {
     }
   }
 
-  Future<void> uploadImage() async {
+  Future<void> uploadImage(String idFolder) async {
     try {
       if (state.imageFiles.isEmpty) {
         return;
       } else {
         List<String> imagesUrl = [];
         for (XFile imageFile in state.imageFiles) {
-          String imageUrl = await _uploadImage(imageFile);
+          String imageUrl = await _uploadImage(imageFile, idFolder);
           imagesUrl.add(imageUrl);
         }
         state.listImageUrl.value = imagesUrl;
@@ -75,16 +78,19 @@ class CreatePostLogic extends GetxController {
 
   Future<void> createPost() async {
     if (state.imageFiles.isNotEmpty) {
+      String idFolder = uid.v1();
       EasyLoading.show();
-      await uploadImage().then(
+      await uploadImage(idFolder).then(
         (value) async {
           Map<String, dynamic> data = {
             "content": state.contentController.text,
             "images": state.listImageUrl,
+            "folderId": idFolder,
           };
           int result = await apiClient.createPost(data: data);
           EasyLoading.dismiss();
           if (result == 200) {
+            Get.back();
             logSuccess("success create post");
           } else {
             logError("create fail");
@@ -101,6 +107,7 @@ class CreatePostLogic extends GetxController {
       EasyLoading.dismiss();
       if (result == 200) {
         logSuccess("success create post");
+        Get.back();
       } else {
         logError("create fail");
       }

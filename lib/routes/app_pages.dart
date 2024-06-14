@@ -4,6 +4,8 @@ import 'package:blog/modules/auth/register/register_view.dart';
 import 'package:blog/modules/auth/forgot_password/forgot_binding.dart';
 import 'package:blog/modules/auth/forgot_password/forgot_view.dart';
 import 'package:blog/modules/home/create_post/create_post_view.dart';
+import 'package:blog/modules/home/home_binding.dart';
+import 'package:blog/modules/home/home_view.dart';
 import 'package:blog/modules/main/main_binding.dart';
 import 'package:blog/modules/main/main_view.dart';
 import 'package:blog/modules/splash/splash_binding.dart';
@@ -31,10 +33,16 @@ class AppPages {
       binding: RegisterBinding(),
     ),
     GetPage(
-      name: AppRoutes.MAIN,
-      page: () => const MainView(),
-      binding: MainBinding(),
-    ),
+        name: AppRoutes.MAIN,
+        page: () => const MainView(),
+        binding: MainBinding(),
+        children: [
+          GetPage(
+            name: AppRoutes.HOME,
+            page: () => const HomeView(),
+            binding: HomeBinding(),
+          )
+        ]),
     GetPage(
       name: AppRoutes.FORGOT_PASSWORD,
       page: () => const ForgotPasswordView(),

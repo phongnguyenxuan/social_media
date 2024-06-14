@@ -3,6 +3,7 @@
 import 'package:blog/core/constants/env.dart';
 import 'package:blog/models/user_model.dart';
 import 'package:blog/modules/home/home_view.dart';
+import 'package:blog/modules/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,9 +22,7 @@ class MainState {
       Container(
         color: Colors.blue,
       ),
-      Container(
-        color: Colors.pink,
-      ),
+      const ProfileView()
     ];
   }
 }
